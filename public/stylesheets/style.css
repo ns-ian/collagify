@@ -1,0 +1,83 @@
+body {
+  padding: 50px;
+  font: 18px Arial, sans-serif;
+  background-color: #000000;
+  color: #FFFFFF;
+}
+
+h1 {
+  color: #1db954;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+a {
+  color: #00B7FF;
+}
+
+table ul {
+  list-style-type: none;
+  font: 14px Arial, sans-serif;
+  color: white;
+}
+
+form > * {
+  display: block;
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+
+.button {
+  background-color: #1db954;
+  border-radius: 23px;
+  color: white;
+  border: none;
+  text-align: center;
+  text-decoration: none;
+  font-size: 16px;
+  padding: 15px;
+}
+
+#A {
+  margin-top: 39px;
+}
+
+#collagify {
+  background-color: black;
+  padding: 50px;
+  white-space: nowrap;
+}
+
+#collagify > tr:first-child {
+  text-align: center;
+  font: 36px Arial, sans-serif;
+  color: white;
+}
+
+#collagify table tr td {
+  padding: 3px;
+}
+
+#collagify table tr td:first-child {
+  padding: 5px;
+}
+
+#collagify table {
+  font: 24px Arial, sans-serif;
+  color: white;
+}
+
+#headerRow td {
+  padding: 5px !important;
+}
+
+#legendCell {
+  vertical-align: top;
+}
+
+#successMsg {
+  font: 18px Arial, sans-serif;
+}

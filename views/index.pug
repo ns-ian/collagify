@@ -1,0 +1,18 @@
+extends layout
+
+block content
+  h1 Collagify
+  h6 The essential album collage generator
+  p Copy and paste the #[abbr(title='from the last segment of an album URL,\ne.g. open.spotify.com/album/1Z2jkEtW5Sc9wWVxUgyG0E') unique identifiers] of your favorite albums on Spotify to assemble into a collage. You will be able to preview your collage on this page, and save it as a PNG.
+  form(id='collageParams' method='post' autocomplete='off')
+    label(for='collageTitle') Title
+    input(type='text' name='collageTitle' id='collageTitle')
+    label(for='cols') # of Columns
+    input(name='cols' id='cols' type='number' min='1' max='10')
+    label(for='album_id_list') Album identifiers (comma separated)
+    textarea(name='album_id_list' rows='4' cols='50')
+    input(id='myButton' class='button' type='submit' value='Generate')
+
+  script(src='https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js')
+  script(src='/javascripts/html2canvas.min.js')
+  script(src='/javascripts/collagify.js')
