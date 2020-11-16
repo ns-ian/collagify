@@ -1,40 +1,66 @@
 $(() => {
   $('#collageParams').submit(e => {
+    const ALBUM_IDS_IDX = 2;
     paramData = $('#collageParams').serializeArray();
     console.log(paramData);
-
-    const COLLAGE_TITLE_IDX = 0;
-    const NUM_COLS_IDX = 1;
-    const ALBUM_IDS_IDX = 2;
 
     $.ajax({
       type: 'POST',
       url: '/',
       cache: false,
       data: { albumIdStr: paramData[ALBUM_IDS_IDX]['value'] },
-      success: d => {
-        if ($('#collagify').length) {
-          $('#collagify').remove();
-        }
-
-        createTable(paramData[COLLAGE_TITLE_IDX]['value']);
-        createCollage(paramData[NUM_COLS_IDX]['value']);
-        populateTable(d, paramData[NUM_COLS_IDX]['value']);
-
-        if (!$('#saveButton').length) {
-          appendSaveButton();
-        }
-      }
+      success: generateOutcome,
+      error: generateError
     });
     e.preventDefault();
   });
 });
 
+function generateOutcome(data, textStatus, jqXHR) {
+  const COLLAGE_TITLE_IDX = 0;
+  const NUM_COLS_IDX = 1;
+
+  if ($('#collagify-div').length) {
+    $('#collagify-div').remove();
+  }
+
+  createTable(paramData[COLLAGE_TITLE_IDX]['value']);
+  createCollage(paramData[NUM_COLS_IDX]['value']);
+  populateTable(data, paramData[NUM_COLS_IDX]['value']);
+}
+
+function generateError(jqXHR, textStatus, errorThrown) {
+  appendErrorMsg(jqXHR.status);
+}
+
+function appendErrorMsg(status) {
+  var $errorMsg = undefined;
+  switch(status) {
+    case 400:
+      $errorMsg = $('<p>Your request is malformed. Check the format of your input, and then try again.</p>');
+      break;
+    case 500:
+      $errorMsg = $('<p>Oops! An error has occurred. Please try again, or come back later.</p>');
+      break;
+    default:
+      $errorMsg = $('<p>An unspecified error has occurred.</p>');
+  }
+
+  if ($('#collagify-div').length) {
+    $('#collagify-div').html($errorMsg);
+  } else {
+    let html = $('<div id="collagify-div">').append($errorMsg);
+    html.appendTo('body');
+  }
+}
+
 function createTable(title) {
+  $('<div id="collagify-div">').appendTo('body');
+  appendSaveButton();
   var $table = $('<table id="collagify">');
   $table.append(`<tr><td colspan="2">${title}</td></tr>`);
   $table.append('<tr><td id="collageCell"><td id="legendCell">');
-  $table.appendTo('body');
+  $table.appendTo('#collagify-div');
 }
 
 function createCollage(columns) {
@@ -53,6 +79,7 @@ function populateTable(albums, columns) {
   var $collage = $('#collage');
   var $legend = $('#legendCell');
 
+  // decimal range of UTF code points (A-Z)
   if (65 + rowsTotal > 90) { // Don't validate length, just throw it out
     rowsTotal = 25;
   }
@@ -106,7 +133,7 @@ function appendSaveButton() {
   var $successMessage = $('<p><span id="successMsg">Your generated collage is available below. You can save it by clicking this button: </span></p>');
   $saveButton.prop('id', 'saveButton');
   $saveButton.prop('class', 'button');
-  $successMessage.insertAfter('#collageParams');
+  $successMessage.appendTo('#collagify-div');
   $saveButton.insertAfter('#successMsg');
   $saveButton.click(generateCanvas);
 }

@@ -27,7 +27,17 @@ app.use(function(req, res, next) {
   next(createError(404));
 });
 
-// error handler
+// handle ajax errors
+app.use(function(err, req, res, next) {
+  if (req.xhr) {
+    res.status(err.statusCode);
+    res.send(err.message);
+  } else {
+    next(err);
+  }
+});
+
+// generic error handler
 app.use(function(err, req, res, next) {
   // set locals, only providing error in development
   res.locals.message = err.message;

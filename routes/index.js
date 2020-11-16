@@ -35,13 +35,15 @@ router.post('/', function(req, res, next) {
   albumArr = tidiedAlbumIdStr.split(',');
 
   spotifyApi.getAlbums(albumArr)
-    .then(response => {
-      var albums = response.body.albums;
-      res.send(albums);
-    }, error => {
-      console.log(error);
-      next(error);
-    });
+    .then(
+      apiRes => {
+        res.send(apiRes.body.albums);
+      },
+      apiErr => {
+        console.log(apiErr);
+        next(apiErr);
+      }
+    );
 });
 
 module.exports = router;
